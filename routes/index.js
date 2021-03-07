@@ -1,17 +1,17 @@
 var express = require("express");
 const MyDB = require("../db/MyDB");
-var path = require('path');
+var jwt = require("jsonwebtoken");
+var config = require("../config/auth.config")
+var path = require("path");
+var authJwt = require("../middlewares/authJwt");
 var router = express.Router();
 
-/* GET home page. */
-router.get("/login", async function (req, res, next) {
-  console.log("aaa");
-  console.log(MyDB);
-  res.json({ error: "ddd" });
+router.get("/", function (req, res, next) {
+  res.sendFile(path.resolve("public/login.html"));
 });
 
-router.get("/home", function(req, res, next) {
-  res.sendFile(path.resolve("public/home.html"))
+router.get("/home", [authJwt.verifyToken], function (req, res, next) {
+  res.sendFile(path.resolve("public/home.html"));
 });
 
 router.post("/signup", async function (req, res, next) {
@@ -20,30 +20,34 @@ router.post("/signup", async function (req, res, next) {
   console.log(req.body.email);
   let result = await MyDB.queryUser({ email: req.body.email });
   if (result) {
-    res.json({error: "user already exists."});
+    res.json({ error: "user already exists." });
   } else {
     result = await MyDB.storeUser({
       userName: req.body.userName,
       email: req.body.email,
-      password: req.body.password
-    })
+      password: req.body.password,
+    });
   }
-  res.redirect('/home');
+  res.redirect("/");
 });
 
 router.post("/login", async function (req, res, next) {
-  console.log("login wzy")
+  console.log("start login");
   console.log(req.body.email);
-  let result = await MyDB.queryUser({ email: req.body.email, password: req.body.password });
+  let result = await MyDB.queryUser({
+    email: req.body.email,
+    password: req.body.password,
+  });
   if (result) {
-    res.redirect('/home');
+    console.log("sucesss");
+    var token = jwt.sign({ id: req.body.email }, config.secret, {
+      expiresIn: 86400, // 24 hours
+    });
+    console.log("token:" + token);
+    res.cookie('jwt',token, { httpOnly: true, secure: false, maxAge: 3600000 })
+    res.redirect("/home");
   } else {
-    res.json({error: "no such user."});
-    result = await MyDB.storeUser({
-      userName: req.body.userName,
-      email: req.body.email,
-      password: req.body.password
-    })
+    res.json({ error: "no such user." });
   }
 });
 
