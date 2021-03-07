@@ -7,7 +7,18 @@ var authJwt = require("../middlewares/authJwt");
 var router = express.Router();
 
 router.get("/", function (req, res, next) {
-  res.sendFile(path.resolve("public/login.html"));
+  let token = req.cookies.jwt;
+  if (!token) {
+    res.sendFile(path.resolve("public/login.html"));
+  }
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      res.sendFile(path.resolve("public/login.html"));
+    } else {
+      req.userId = decoded.id;
+    res.redirect("/home");
+    }
+  });
 });
 
 router.get("/home", [authJwt.verifyToken], function (req, res, next) {
