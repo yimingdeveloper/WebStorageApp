@@ -4,6 +4,8 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/auth.config');
 var path = require('path');
 var authJwt = require('../middlewares/authJwt');
+var fs = require('fs');
+const { dirname } = require('path');
 var router = express.Router();
 
 router.get('/', [authJwt.verifyToken], function (req, res, next) {
@@ -26,8 +28,9 @@ router.post('/createFile', [authJwt.verifyToken], async (req, res) => {
     return res.status(400).send('No files were uploaded.');
   }
 
+  dirPath = __dirname + '/../public/files/' + req.userId + '/';
   file = req.files.file;
-  uploadPath = __dirname + '/../public/files/' + file.name;
+  uploadPath = dirPath + file.name;
 
   try {
     await file.mv(uploadPath);
@@ -56,7 +59,7 @@ router.get('/getFiles', async (req, res) => {
   }
 });
 
-router.post('/deleteFile', async (req, res) => {
+router.post('/deleteFile', [authJwt.verifyToken], async (req, res) => {
   console.log('Delete file', req.body);
   try {
     const file = req.body;
