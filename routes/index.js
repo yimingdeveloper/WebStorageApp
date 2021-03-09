@@ -37,7 +37,7 @@ router.post('/createFile', [authJwt.verifyToken], async (req, res) => {
 
     const fileObj = {
       name: req.body.name,
-      url: '/files/' + file.name,
+      url: '/files/' + req.userId + '/' + file.name,
       userId: req.userId,
     };
     const dbRes = await MyDB.createFile(fileObj);
@@ -49,9 +49,10 @@ router.post('/createFile', [authJwt.verifyToken], async (req, res) => {
   }
 });
 
-router.get('/getFiles', async (req, res) => {
+router.get('/getFiles', [authJwt.verifyToken], async (req, res) => {
   try {
-    const files = await MyDB.getFiles();
+    const query = { userId: req.userId };
+    const files = await MyDB.getFiles(query);
     res.send({ files: files });
   } catch (e) {
     console.log('Error', e);

@@ -61,7 +61,7 @@ function myDB() {
     }
   };
 
-  myDB.getFiles = async (query = {}) => {
+  myDB.getFiles = async (query) => {
     try {
       client = new MongoClient(uri, { useUnifiedTopology: true });
       console.log('Connecting to the db');
