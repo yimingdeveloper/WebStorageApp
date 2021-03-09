@@ -18,7 +18,7 @@ router.get('/files', [authJwt.verifyToken], function (req, res, next) {
   res.sendFile(path.resolve('public/files/files.html'));
 });
 
-router.post('/createFile', async (req, res) => {
+router.post('/createFile', [authJwt.verifyToken], async (req, res) => {
   let file;
   let uploadPath;
 
@@ -32,7 +32,11 @@ router.post('/createFile', async (req, res) => {
   try {
     await file.mv(uploadPath);
 
-    const fileObj = { name: req.body.name, url: '/files/' + file.name };
+    const fileObj = {
+      name: req.body.name,
+      url: '/files/' + file.name,
+      userId: req.userId,
+    };
     const dbRes = await MyDB.createFile(fileObj);
 
     res.redirect('/files');
@@ -99,7 +103,7 @@ router.post('/login', async function (req, res, next) {
       secure: false,
       maxAge: 3600000,
     });
-    res.redirect('/home');
+    res.redirect('/files');
   } else {
     res.json({ error: 'no such user.' });
   }
