@@ -1,30 +1,60 @@
-var express = require("express");
-const MyDB = require("../db/MyDB");
-var jwt = require("jsonwebtoken");
-var config = require("../config/auth.config")
-var path = require("path");
-var authJwt = require("../middlewares/authJwt");
+var express = require('express');
+const MyDB = require('../db/MyDB');
+var jwt = require('jsonwebtoken');
+var config = require('../config/auth.config');
+var path = require('path');
+var authJwt = require('../middlewares/authJwt');
 var router = express.Router();
 
-router.get("/", [authJwt.verifyToken], function (req, res, next) {
-  res.sendFile(path.resolve("public/login.html"));
+router.get('/', [authJwt.verifyToken], function (req, res, next) {
+  res.sendFile(path.resolve('public/login.html'));
 });
 
-router.get("/home", [authJwt.verifyToken], function (req, res, next) {
-  res.sendFile(path.resolve("public/home.html"));
+router.get('/home', [authJwt.verifyToken], function (req, res, next) {
+  res.sendFile(path.resolve('public/home.html'));
 });
 
-router.get("/files",[authJwt.verifyToken],  function (req, res, next) {
-  res.sendFile(path.resolve("public/home.html"));
+router.get('/files', [authJwt.verifyToken], function (req, res, next) {
+  res.sendFile(path.resolve('public/files.html'));
 });
 
-router.post("/signup", async function (req, res, next) {
-  console.log("signup wzy begin");
-  console.log("req.body.email");
+router.post('/createFile', async (req, res) => {
+  console.log('Create file', req.body);
+
+  let file;
+  let uploadPath;
+
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  file = req.files.file;
+  uploadPath = __dirname + '/../public/files/' + file.name;
+
+  // if (err) return res.status(500).send(err);
+
+  try {
+    // Use the mv() method to place the file somewhere on your server
+    await file.mv(uploadPath);
+
+    const fileObj = { name: req.body.name, url: '/images/' + file.name };
+    const dbRes = await myDB.createFile(fileObj);
+    // res.send({ done: dbRes });
+
+    res.redirect('/');
+  } catch (e) {
+    console.log('Error', e);
+    res.status(400).send({ err: e });
+  }
+});
+
+router.post('/signup', async function (req, res, next) {
+  console.log('signup wzy begin');
+  console.log('req.body.email');
   console.log(req.body.email);
   let result = await MyDB.queryUser({ email: req.body.email });
   if (result) {
-    res.json({ error: "user already exists." });
+    res.json({ error: 'user already exists.' });
   } else {
     result = await MyDB.storeUser({
       userName: req.body.userName,
@@ -32,26 +62,30 @@ router.post("/signup", async function (req, res, next) {
       password: req.body.password,
     });
   }
-  res.redirect("/");
+  res.redirect('/');
 });
 
-router.post("/login", async function (req, res, next) {
-  console.log("start login");
+router.post('/login', async function (req, res, next) {
+  console.log('start login');
   console.log(req.body.email);
   let result = await MyDB.queryUser({
     email: req.body.email,
     password: req.body.password,
   });
   if (result) {
-    console.log("sucesss");
+    console.log('sucesss');
     var token = jwt.sign({ id: req.body.email }, config.secret, {
       expiresIn: 86400, // 24 hours
     });
-    console.log("token:" + token);
-    res.cookie('jwt',token, { httpOnly: true, secure: false, maxAge: 3600000 })
-    res.redirect("/home");
+    console.log('token:' + token);
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 3600000,
+    });
+    res.redirect('/home');
   } else {
-    res.json({ error: "no such user." });
+    res.json({ error: 'no such user.' });
   }
 });
 
