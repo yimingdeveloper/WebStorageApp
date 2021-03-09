@@ -19,8 +19,6 @@ router.get('/files', [authJwt.verifyToken], function (req, res, next) {
 });
 
 router.post('/createFile', async (req, res) => {
-  console.log('Create file', req.body);
-
   let file;
   let uploadPath;
 
@@ -31,17 +29,13 @@ router.post('/createFile', async (req, res) => {
   file = req.files.file;
   uploadPath = __dirname + '/../public/files/' + file.name;
 
-  // if (err) return res.status(500).send(err);
-
   try {
-    // Use the mv() method to place the file somewhere on your server
     await file.mv(uploadPath);
 
-    const fileObj = { name: req.body.name, url: '/images/' + file.name };
-    const dbRes = await myDB.createFile(fileObj);
-    // res.send({ done: dbRes });
+    const fileObj = { name: req.body.name, url: '/files/' + file.name };
+    const dbRes = await MyDB.createFile(fileObj);
 
-    res.redirect('/');
+    res.redirect('/files');
   } catch (e) {
     console.log('Error', e);
     res.status(400).send({ err: e });
