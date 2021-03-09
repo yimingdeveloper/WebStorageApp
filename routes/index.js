@@ -15,7 +15,7 @@ router.get('/home', [authJwt.verifyToken], function (req, res, next) {
 });
 
 router.get('/files', [authJwt.verifyToken], function (req, res, next) {
-  res.sendFile(path.resolve('public/files.html'));
+  res.sendFile(path.resolve('public/files/files.html'));
 });
 
 router.post('/createFile', async (req, res) => {

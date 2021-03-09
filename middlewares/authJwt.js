@@ -28,7 +28,7 @@ verifyToken = (req, res, next) => {
         console.log(decoded.id);
         req.userId = decoded.id; // email address
         if (isLoginPage) {
-          res.redirect('/home');
+          res.redirect('/files');
         } else {
           next();
         }

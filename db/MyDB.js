@@ -1,4 +1,5 @@
-const { MongoClient } = require('mongodb');
+// const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 function myDB() {
   const myDB = {};
@@ -10,7 +11,7 @@ function myDB() {
     try {
       console.log('query');
       console.log(query);
-      client = new MongoClient(uri);
+      client = new MongoClient(uri, { useUnifiedTopology: true });
       await client.connect();
       const db = client.db(dbName);
       const userCol = db.collection('users');
@@ -26,7 +27,7 @@ function myDB() {
 
   myDB.storeUser = async (user) => {
     try {
-      client = new MongoClient(uri);
+      client = new MongoClient(uri, { useUnifiedTopology: true });
       await client.connect();
       const db = client.db(dbName);
       const userCol = db.collection('users');
@@ -43,7 +44,7 @@ function myDB() {
 
   myDB.createFile = async (file) => {
     try {
-      client = new MongoClient(uri);
+      client = new MongoClient(uri, { useUnifiedTopology: true });
       console.log('Connecting to the db');
       await client.connect();
       console.log('Connected!');
@@ -62,7 +63,7 @@ function myDB() {
 
   myDB.getFiles = async (query = {}) => {
     try {
-      client = new MongoClient(uri);
+      client = new MongoClient(uri, { useUnifiedTopology: true });
       console.log('Connecting to the db');
       await client.connect();
       console.log('Connected!');
