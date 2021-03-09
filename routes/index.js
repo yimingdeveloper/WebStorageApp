@@ -42,6 +42,28 @@ router.post('/createFile', async (req, res) => {
   }
 });
 
+router.get('/getFiles', async (req, res) => {
+  try {
+    const files = await MyDB.getFiles();
+    res.send({ files: files });
+  } catch (e) {
+    console.log('Error', e);
+    res.status(400).send({ err: e });
+  }
+});
+
+router.post('/deleteFile', async (req, res) => {
+  console.log('Delete file', req.body);
+  try {
+    const file = req.body;
+    const dbRes = await MyDB.deleteFile(file);
+    res.send({ done: dbRes });
+  } catch (e) {
+    console.log('Error', e);
+    res.status(400).send({ err: e });
+  }
+});
+
 router.post('/signup', async function (req, res, next) {
   console.log('signup wzy begin');
   console.log('req.body.email');
