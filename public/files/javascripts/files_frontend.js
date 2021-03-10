@@ -32,10 +32,16 @@ function renderFile(file) {
   divFile.appendChild(imgUrl);
 
   const btnDelete = document.createElement('button');
-  btnDelete.textContent = 'X';
+  btnDelete.textContent = 'Delete';
   btnDelete.className = 'btn btn-danger';
   btnDelete.addEventListener('click', () => deleteFile(file));
   divFile.appendChild(btnDelete);
+
+  const btnDownload = document.createElement('button');
+  btnDownload.textContent = 'Download';
+  btnDownload.className = 'btn btn-success';
+  btnDownload.addEventListener('click', () => downloadFile(file));
+  divFile.appendChild(btnDownload);
 
   divFiles.appendChild(divFile);
 }
@@ -48,6 +54,34 @@ async function reloadFiles() {
   console.log('Got data', res);
 
   res.files.forEach(renderFile);
+}
+
+async function downloadFile(file) {
+  const resRaw = await fetch('/downloadFile', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    responseType: 'blob',
+    body: JSON.stringify(file),
+  }).then((res) =>
+    res.blob().then((blob) => {
+      console.log(file);
+      var a = document.createElement('a');
+      document.body.appendChild(a); //Compatibility for firefox, add tag of <a> to body
+      var url = window.URL.createObjectURL(blob);
+      a.href = url;
+
+      var regexp = /(?!.*\/).*/;
+      var result = file.url.match(regexp);
+      a.download = result[0];
+      a.target = '_blank';
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    })
+  );
+  console.log(resRaw);
 }
 
 reloadFiles();

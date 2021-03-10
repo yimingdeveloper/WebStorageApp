@@ -66,11 +66,21 @@ router.get('/getFiles', [authJwt.verifyToken], async (req, res) => {
 });
 
 router.post('/deleteFile', [authJwt.verifyToken], async (req, res) => {
-  console.log('Delete file', req.body);
   try {
     const file = req.body;
     const dbRes = await MyDB.deleteFile(file);
     res.send({ done: dbRes });
+  } catch (e) {
+    console.log('Error', e);
+    res.status(400).send({ err: e });
+  }
+});
+
+router.post('/downloadFile', [authJwt.verifyToken], async (req, res) => {
+  try {
+    const file = req.body;
+    const filePath = path.resolve('public' + file.url);
+    res.sendFile(path.resolve('public' + file.url));
   } catch (e) {
     console.log('Error', e);
     res.status(400).send({ err: e });
