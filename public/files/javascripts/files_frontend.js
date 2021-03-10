@@ -36,6 +36,7 @@ function renderFile(file) {
   } else {
     imgUrl.setAttribute('src', '/images/default_icon.png');
   }
+  imgUrl.setAttribute('height', '200px');
   divFile.appendChild(imgUrl);
 
   const btnDelete = document.createElement('button');
