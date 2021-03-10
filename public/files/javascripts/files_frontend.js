@@ -28,7 +28,14 @@ function renderFile(file) {
   divFile.appendChild(divName);
 
   const imgUrl = document.createElement('img');
-  imgUrl.setAttribute('src', file.url);
+  var index = file.url.lastIndexOf('.');
+  var ext = file.url.substr(index + 1);
+  if (ext == 'jpg' || ext == 'png') {
+    console.log('file:', file);
+    imgUrl.setAttribute('src', file.url);
+  } else {
+    imgUrl.setAttribute('src', '/images/default_icon.png');
+  }
   divFile.appendChild(imgUrl);
 
   const btnDelete = document.createElement('button');
