@@ -4,7 +4,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 function myDB() {
   const myDB = {};
   const dbName = 'fileStorage';
-  const uri = 'mongodb://localhost:27017';
+  const uri = process.env.DB_URL
   let client;
 
   myDB.queryUser = async (query = {}) => {
