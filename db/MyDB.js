@@ -9,16 +9,11 @@ function myDB() {
 
   myDB.queryUser = async (query = {}) => {
     try {
-      console.log('query');
-      console.log(query);
       client = new MongoClient(uri, { useUnifiedTopology: true });
       await client.connect();
       const db = client.db(dbName);
       const userCol = db.collection('users');
-      console.log('before write');
-      console.log(query);
-      file = await userCol.findOne(query);
-      console.log(file);
+      let file = await userCol.findOne(query);
       return file;
     } finally {
       client.close();
@@ -31,8 +26,6 @@ function myDB() {
       await client.connect();
       const db = client.db(dbName);
       const userCol = db.collection('users');
-      console.log('before write');
-      console.log(user);
       let result = await userCol.insertOne(user);
       return result;
     } catch (error) {
