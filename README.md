@@ -8,7 +8,7 @@ Zhenyu Wang, Yiming Chu
 
 ## Course Deployed at
 
-https://guarded-gorge-11995.herokuapp.com/
+https://webstorage-neu-web.herokuapp.com/
 
 ## Class Link
 
