@@ -109,12 +109,14 @@ async function fetchUserName() {
 }
 
 window.onload = function () {
-  document.getElementById("logoutButton").addEventListener("click", async function () {
-    await fetch("/logout", {
-      method: "POST"
-    })
-    window.location.replace("/");
-  });
+  document
+    .getElementById("logoutButton")
+    .addEventListener("click", async function () {
+      await fetch("/logout", {
+        method: "POST",
+      });
+      window.location.replace("/");
+    });
   fetchUserName();
 };
 
