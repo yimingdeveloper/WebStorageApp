@@ -20,6 +20,10 @@ Implement a web storage website using JS/HTML5/CSS, express and mongodb, and the
 
 ## Screenshot
 
+![image](https://github.com/yimingdeveloper/WebStorageApp/blob/main/public/assets/screenshot1.jpg)
+![image](https://github.com/yimingdeveloper/WebStorageApp/blob/main/public/assets/screenshot2.png)
+![image](https://github.com/yimingdeveloper/WebStorageApp/blob/main/public/assets/screenshot3.png)
+
 ## Instructions to build
 
 1. First git clone the repository to local
