@@ -31,3 +31,7 @@ Implement a web storage website using JS/HTML5/CSS, express and mongodb, and the
 3. Use 'npm install' to install the dependencies
 4. Install mongodb locally and start the service of mongodb locally
 5. Use 'npm start' to start the service and then we can access the website locally at 'localhost://3000'
+
+## A short public and narrated video demonstrating the application
+
+https://youtu.be/ROMgbOoIbtU
