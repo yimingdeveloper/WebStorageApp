@@ -8,7 +8,7 @@ var fs = require("fs");
 var router = express.Router();
 
 router.get("/", [authJwt.verifyToken], function (req, res, next) {
-  res.sendFile(path.resolve("public/login.html"));
+  res.sendFile(path.resolve("public/login/login.html"));
 });
 
 router.get("/files", [authJwt.verifyToken], function (req, res, next) {
