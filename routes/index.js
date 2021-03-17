@@ -46,7 +46,6 @@ router.post("/createFile", [authJwt.verifyToken], async (req, res) => {
     return res.status(400).send("No files were uploaded.");
   }
 
-  // dirPath = __dirname + '/../public/files/' + req.userId + '/';
   let dirPath = __dirname + "/../public/files/" + req.userId + "/";
   file = req.files.file;
   uploadPath = dirPath + file.name;

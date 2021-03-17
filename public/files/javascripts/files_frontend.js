@@ -43,7 +43,7 @@ function renderFile(file) {
   btnPreview.textContent = 'Preview';
   btnPreview.className = 'btn btn-primary';
   btnPreview.addEventListener('click', function () {
-    console.log('ddd');
+    console.log('ddd'); //console.log('showing preview')
     window.open(file.url, '_blank');
   });
   divFile.appendChild(btnPreview);

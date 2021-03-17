@@ -1,4 +1,3 @@
-// const { MongoClient } = require('mongodb');
 const { MongoClient, ObjectId } = require('mongodb');
 
 function myDB() {
