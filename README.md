@@ -5,6 +5,7 @@ This is a web storage app providing basic functionalities.
 ## Author
 
 Zhenyu Wang, Yiming Chu
+(link of your personal webpages)
 
 ## Course Deployed at
 
@@ -17,6 +18,7 @@ https://johnguerra.co/classes/webDevelopment_spring_2021/
 ## Project Objective
 
 Implement a web storage website using JS/HTML5/CSS, express and mongodb, and then deploy it on heroku
+(more details of use cases)
 
 ## Screenshot
 
